@@ -8,35 +8,62 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* The Glow Guild Design System - Luxe Beauty Aesthetic */
+    --background: 0 0% 99%;
+    --foreground: 0 0% 9%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 0 0% 9%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 0 0% 9%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Primary: Deep charcoal for elegance */
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Secondary: Soft warm grey */
+    --secondary: 20 6% 90%;
+    --secondary-foreground: 0 0% 9%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Muted: Light neutral background */
+    --muted: 20 6% 95%;
+    --muted-foreground: 0 0% 45%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Accent: Muted terracotta for beauty warmth */
+    --accent: 14 25% 70%;
+    --accent-foreground: 0 0% 98%;
+
+    /* Success: Sage green for creator success */
+    --success: 120 15% 60%;
+    --success-foreground: 0 0% 98%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 20 6% 88%;
+    --input: 20 6% 92%;
+    --ring: 14 25% 70%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
+
+    /* Custom Beauty Brand Colors */
+    --luxury-gold: 45 35% 75%;
+    --luxury-gold-foreground: 0 0% 9%;
+    
+    /* Premium gradients */
+    --gradient-luxury: linear-gradient(135deg, hsl(14 25% 70%), hsl(20 20% 80%));
+    --gradient-subtle: linear-gradient(180deg, hsl(0 0% 99%), hsl(20 6% 97%));
+    --gradient-data: linear-gradient(135deg, hsl(120 15% 60%), hsl(14 25% 70%));
+    
+    /* Elegant shadows */
+    --shadow-luxury: 0 20px 40px -12px hsl(14 25% 70% / 0.25);
+    --shadow-card: 0 4px 20px -2px hsl(0 0% 0% / 0.08);
+    --shadow-button: 0 2px 8px -2px hsl(14 25% 70% / 0.3);
+    
+    /* Smooth transitions */
+    --transition-luxury: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
     --sidebar-background: 0 0% 98%;
 
