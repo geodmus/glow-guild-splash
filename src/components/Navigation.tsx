@@ -1,9 +1,20 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Menu, X, User, LogOut } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Badge } from "@/components/ui/badge";
 
 export const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { user, profile, signOut, loading } = useAuth();
 
   const navItems = [
     { label: "For Brands", href: "#brands" },
@@ -34,14 +45,42 @@ export const Navigation = () => {
             ))}
           </div>
 
-          {/* Desktop CTAs */}
+          {/* Desktop Auth */}
           <div className="hidden md:flex items-center gap-3">
-            <Button variant="ghost" size="sm">
-              Login
-            </Button>
-            <Button variant="accent" size="sm">
-              Get Started
-            </Button>
+            {loading ? (
+              <div className="h-8 w-20 bg-muted animate-pulse rounded"></div>
+            ) : user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className="gap-2">
+                    <User className="w-4 h-4" />
+                    {profile?.display_name || user.email}
+                    {profile?.user_type && (
+                      <Badge variant="secondary" className="ml-1 text-xs">
+                        {profile.user_type}
+                      </Badge>
+                    )}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={signOut}>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Sign Out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <>
+                <Button variant="ghost" size="sm" onClick={() => window.location.href = '/auth'}>
+                  Login
+                </Button>
+                <Button variant="accent" size="sm" onClick={() => window.location.href = '/auth'}>
+                  Get Started
+                </Button>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -69,13 +108,34 @@ export const Navigation = () => {
                   {item.label}
                 </a>
               ))}
-              <div className="flex gap-3 px-4 pt-4 border-t border-border/50">
-                <Button variant="ghost" size="sm" className="flex-1">
-                  Login
-                </Button>
-                <Button variant="accent" size="sm" className="flex-1">
-                  Get Started
-                </Button>
+              {/* Mobile Auth */}
+              <div className="px-4 pt-4 border-t border-border/50">
+                {user ? (
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <User className="w-4 h-4" />
+                      {profile?.display_name || user.email}
+                      {profile?.user_type && (
+                        <Badge variant="secondary" className="text-xs">
+                          {profile.user_type}
+                        </Badge>
+                      )}
+                    </div>
+                    <Button variant="ghost" size="sm" className="w-full" onClick={signOut}>
+                      <LogOut className="w-4 h-4 mr-2" />
+                      Sign Out
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="flex gap-3">
+                    <Button variant="ghost" size="sm" className="flex-1" onClick={() => window.location.href = '/auth'}>
+                      Login
+                    </Button>
+                    <Button variant="accent" size="sm" className="flex-1" onClick={() => window.location.href = '/auth'}>
+                      Get Started
+                    </Button>
+                  </div>
+                )}
               </div>
             </div>
           </div>
