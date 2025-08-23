@@ -87,6 +87,25 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           setTimeout(() => {
             fetchProfile(session.user.id);
           }, 0);
+          
+          // Redirect to appropriate dashboard after login
+          if (event === 'SIGNED_IN' && window.location.pathname === '/auth') {
+            setTimeout(() => {
+              // Fetch profile first to determine redirect
+              supabase
+                .from('profiles')
+                .select('user_type')
+                .eq('user_id', session.user.id)
+                .maybeSingle()
+                .then(({ data }) => {
+                  if (data?.user_type === 'brand') {
+                    window.location.href = '/brand/dashboard';
+                  } else {
+                    window.location.href = '/creator/dashboard';
+                  }
+                });
+            }, 100);
+          }
         } else {
           setProfile(null);
         }

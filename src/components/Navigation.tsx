@@ -65,6 +65,12 @@ export const Navigation = () => {
                 <DropdownMenuContent align="end" className="w-56">
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <a href={profile?.user_type === 'brand' ? '/brand/dashboard' : '/creator/dashboard'}>
+                      Dashboard
+                    </a>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={signOut}>
                     <LogOut className="mr-2 h-4 w-4" />
                     Sign Out
@@ -121,7 +127,18 @@ export const Navigation = () => {
                         </Badge>
                       )}
                     </div>
-                    <Button variant="ghost" size="sm" className="w-full" onClick={signOut}>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="w-full justify-start" 
+                      onClick={() => {
+                        window.location.href = profile?.user_type === 'brand' ? '/brand/dashboard' : '/creator/dashboard';
+                        setIsOpen(false);
+                      }}
+                    >
+                      Dashboard
+                    </Button>
+                    <Button variant="ghost" size="sm" className="w-full justify-start" onClick={signOut}>
                       <LogOut className="w-4 h-4 mr-2" />
                       Sign Out
                     </Button>
