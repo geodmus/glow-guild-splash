@@ -70,6 +70,11 @@ export const Navigation = () => {
                       Dashboard
                     </a>
                   </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <a href="/profile">
+                      Profile Settings
+                    </a>
+                  </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={signOut}>
                     <LogOut className="mr-2 h-4 w-4" />
@@ -137,6 +142,17 @@ export const Navigation = () => {
                       }}
                     >
                       Dashboard
+                    </Button>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="w-full justify-start" 
+                      onClick={() => {
+                        window.location.href = '/profile';
+                        setIsOpen(false);
+                      }}
+                    >
+                      Profile Settings
                     </Button>
                     <Button variant="ghost" size="sm" className="w-full justify-start" onClick={signOut}>
                       <LogOut className="w-4 h-4 mr-2" />
