@@ -1,132 +1,436 @@
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* ─────────────────────────────────────────────
+   CSS Custom Properties — Glow Guild Design System
+───────────────────────────────────────────── */
+:root {
+  /* Brand */
+  --gg-cyan:      #00c8d4;
+  --gg-cyan-ink:  #007a82;
+  --gg-magenta:   #cc2d8f;
 
-@layer base {
-  :root {
-    /* The Glow Guild Design System - Luxe Beauty Aesthetic */
-    --background: 0 0% 99%;
-    --foreground: 0 0% 9%;
+  /* Surfaces */
+  --gg-ink:    #0a0a0b;
+  --gg-ink-2:  #121214;
+  --gg-ink-3:  #1a1a1d;
+  --gg-ink-4:  #242428;
+  --gg-line:   #2a2a2f;
+  --gg-line-2: #3a3a42;
 
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 9%;
+  /* Text */
+  --gg-text:     #f4f4f5;
+  --gg-text-2:   #a8a8b0;
+  --gg-text-3:   #6b6b74;
+  --gg-text-inv: #0a0a0b;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 9%;
+  /* Semantic */
+  --gg-success: #3ad29f;
+  --gg-warn:    #f5b544;
+  --gg-error:   #ff5a5a;
 
-    /* Primary: Deep charcoal for elegance */
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
+  /* Glows */
+  --gg-glow-cyan:    0 0 0 1px rgba(0,200,212,0.4), 0 0 24px -4px rgba(0,200,212,0.25);
+  --gg-glow-magenta: 0 0 0 1px rgba(204,45,143,0.5), 0 0 28px -4px rgba(204,45,143,0.3);
+  --gg-shadow-lift:  0 1px 0 rgba(255,255,255,0.04) inset, 0 8px 24px -8px rgba(0,0,0,0.6);
 
-    /* Secondary: Soft warm grey */
-    --secondary: 20 6% 90%;
-    --secondary-foreground: 0 0% 9%;
+  /* Motion */
+  --gg-ease:     cubic-bezier(0.2, 0.8, 0.2, 1);
+  --gg-ease-in:  cubic-bezier(0.4, 0, 1, 1);
+  --gg-dur-fast: 120ms;
+  --gg-dur-base: 220ms;
+  --gg-dur-slow: 420ms;
+  --gg-dur-hero: 900ms;
 
-    /* Muted: Light neutral background */
-    --muted: 20 6% 95%;
-    --muted-foreground: 0 0% 45%;
+  /* shadcn/ui compatibility */
+  --background:   0 0% 4%;
+  --foreground:   240 5% 96%;
+  --card:         240 4% 7%;
+  --card-foreground: 240 5% 96%;
+  --popover:      240 4% 10%;
+  --popover-foreground: 240 5% 96%;
+  --primary:      184 100% 42%;
+  --primary-foreground: 0 0% 4%;
+  --secondary:    240 4% 10%;
+  --secondary-foreground: 240 5% 96%;
+  --muted:        240 4% 15%;
+  --muted-foreground: 240 4% 67%;
+  --accent:       322 63% 49%;
+  --accent-foreground: 0 0% 4%;
+  --destructive:  0 100% 67%;
+  --destructive-foreground: 240 5% 96%;
+  --border:       240 4% 17%;
+  --input:        240 4% 10%;
+  --ring:         184 100% 42%;
+  --radius:       4px;
+}
 
-    /* Accent: Muted terracotta for beauty warmth */
-    --accent: 14 25% 70%;
-    --accent-foreground: 0 0% 98%;
+/* ─────────────────────────────────────────────
+   Base Reset
+───────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-    /* Success: Sage green for creator success */
-    --success: 120 15% 60%;
-    --success-foreground: 0 0% 98%;
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
+body {
+  background-color: var(--gg-ink);
+  color: var(--gg-text);
+  font-family: 'Geist', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 400;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
 
-    --border: 20 6% 88%;
-    --input: 20 6% 92%;
-    --ring: 14 25% 70%;
+/* ─────────────────────────────────────────────
+   Typography Base
+───────────────────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Geist', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--gg-text);
+}
 
-    --radius: 0.75rem;
+p {
+  line-height: 1.5;
+  color: var(--gg-text-2);
+}
 
-    /* Custom Beauty Brand Colors */
-    --luxury-gold: 45 35% 75%;
-    --luxury-gold-foreground: 0 0% 9%;
-    
-    /* Premium gradients */
-    --gradient-luxury: linear-gradient(135deg, hsl(14 25% 70%), hsl(20 20% 80%));
-    --gradient-subtle: linear-gradient(180deg, hsl(0 0% 99%), hsl(20 6% 97%));
-    --gradient-data: linear-gradient(135deg, hsl(120 15% 60%), hsl(14 25% 70%));
-    
-    /* Elegant shadows */
-    --shadow-luxury: 0 20px 40px -12px hsl(14 25% 70% / 0.25);
-    --shadow-card: 0 4px 20px -2px hsl(0 0% 0% / 0.08);
-    --shadow-button: 0 2px 8px -2px hsl(14 25% 70% / 0.3);
-    
-    /* Smooth transitions */
-    --transition-luxury: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+a {
+  color: var(--gg-cyan);
+  text-decoration: none;
+  transition: color var(--gg-dur-fast) var(--gg-ease);
+}
 
-    --sidebar-background: 0 0% 98%;
+a:hover {
+  color: #33d4df;
+}
 
-    --sidebar-foreground: 240 5.3% 26.1%;
+strong, b {
+  font-weight: 600;
+  color: var(--gg-text);
+}
 
-    --sidebar-primary: 240 5.9% 10%;
+code, kbd, samp, pre {
+  font-family: 'Geist Mono', ui-monospace, monospace;
+  font-size: 0.875em;
+}
 
-    --sidebar-primary-foreground: 0 0% 98%;
+/* ─────────────────────────────────────────────
+   Focus
+───────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--gg-cyan);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
 
-    --sidebar-accent: 240 4.8% 95.9%;
+:focus:not(:focus-visible) {
+  outline: none;
+}
 
-    --sidebar-accent-foreground: 240 5.9% 10%;
+/* ─────────────────────────────────────────────
+   Scrollbar
+───────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
 
-    --sidebar-border: 220 13% 91%;
+::-webkit-scrollbar-track {
+  background: var(--gg-ink-2);
+}
 
-    --sidebar-ring: 217.2 91.2% 59.8%;
+::-webkit-scrollbar-thumb {
+  background: var(--gg-line-2);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gg-text-3);
+}
+
+/* ─────────────────────────────────────────────
+   Selection
+───────────────────────────────────────────── */
+::selection {
+  background: rgba(0, 200, 212, 0.25);
+  color: var(--gg-text);
+}
+
+/* ─────────────────────────────────────────────
+   Utility Classes
+───────────────────────────────────────────── */
+
+/* Eyebrow label — signature pattern */
+.eyebrow {
+  font-size: clamp(0.75rem, 0.72rem + 0.15vw, 0.8125rem);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gg-text-2);
+}
+
+.eyebrow-cyan {
+  font-size: clamp(0.75rem, 0.72rem + 0.15vw, 0.8125rem);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gg-cyan);
+}
+
+/* Display text helpers */
+.display-tight {
+  line-height: 1.0;
+  letter-spacing: -0.02em;
+}
+
+/* Card base */
+.card-base {
+  background: var(--gg-ink-2);
+  border: 1px solid var(--gg-line);
+  border-radius: 4px;
+  transition:
+    border-color var(--gg-dur-base) var(--gg-ease),
+    transform var(--gg-dur-base) var(--gg-ease),
+    box-shadow var(--gg-dur-base) var(--gg-ease);
+}
+
+.card-base:hover {
+  border-color: var(--gg-line-2);
+  transform: translateY(-2px);
+  box-shadow: var(--gg-shadow-lift);
+}
+
+/* Cyan glow effect */
+.glow-cyan {
+  box-shadow: var(--gg-glow-cyan);
+}
+
+.glow-magenta {
+  box-shadow: var(--gg-glow-magenta);
+}
+
+/* Hairline divider */
+.hairline {
+  border: none;
+  border-top: 1px solid var(--gg-line);
+}
+
+/* Live dot */
+.live-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--gg-magenta);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(204, 45, 143, 0.5); }
+  50%       { box-shadow: 0 0 0 5px rgba(204, 45, 143, 0); }
+}
+
+/* ─────────────────────────────────────────────
+   Button Primitives
+───────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: 'Geist', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 500;
+  font-size: clamp(0.875rem, 0.85rem + 0.15vw, 0.9375rem);
+  letter-spacing: 0.01em;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition:
+    background var(--gg-dur-fast) var(--gg-ease),
+    color var(--gg-dur-fast) var(--gg-ease),
+    border-color var(--gg-dur-fast) var(--gg-ease),
+    transform var(--gg-dur-fast) var(--gg-ease),
+    box-shadow var(--gg-dur-fast) var(--gg-ease);
+  white-space: nowrap;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  min-height: 44px;
+  padding: 0 20px;
+  text-decoration: none;
+}
+
+.btn:active {
+  transform: translateY(1px);
+  filter: brightness(0.92);
+}
+
+/* Primary */
+.btn-primary {
+  background: var(--gg-cyan);
+  color: var(--gg-text-inv);
+  border-color: var(--gg-cyan);
+}
+
+.btn-primary:hover {
+  background: #33d4df;
+  border-color: #33d4df;
+  color: var(--gg-text-inv);
+}
+
+/* Secondary */
+.btn-secondary {
+  background: var(--gg-ink-2);
+  color: var(--gg-text);
+  border-color: var(--gg-line);
+}
+
+.btn-secondary:hover {
+  background: var(--gg-ink-3);
+  border-color: var(--gg-line-2);
+  color: var(--gg-text);
+}
+
+/* Ghost */
+.btn-ghost {
+  background: transparent;
+  color: var(--gg-text-2);
+  border-color: transparent;
+}
+
+.btn-ghost:hover {
+  background: var(--gg-ink-2);
+  color: var(--gg-text);
+}
+
+/* Sizes */
+.btn-sm {
+  min-height: 36px;
+  padding: 0 14px;
+  font-size: clamp(0.75rem, 0.72rem + 0.15vw, 0.8125rem);
+}
+
+.btn-lg {
+  min-height: 52px;
+  padding: 0 28px;
+  font-size: clamp(1rem, 0.97rem + 0.15vw, 1.0625rem);
+  letter-spacing: 0.02em;
+}
+
+/* ─────────────────────────────────────────────
+   Input Primitives
+───────────────────────────────────────────── */
+.input-base {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 16px;
+  background: var(--gg-ink-2);
+  border: 1px solid var(--gg-line);
+  border-radius: 2px;
+  color: var(--gg-text);
+  font-family: 'Geist', ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(0.875rem, 0.85rem + 0.15vw, 0.9375rem);
+  transition: border-color var(--gg-dur-fast) var(--gg-ease);
+}
+
+.input-base::placeholder {
+  color: var(--gg-text-3);
+}
+
+.input-base:focus {
+  outline: none;
+  border-color: var(--gg-cyan);
+  box-shadow: 0 0 0 1px rgba(0, 200, 212, 0.2);
+}
+
+/* ─────────────────────────────────────────────
+   Badge / Status
+───────────────────────────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'Geist', ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(0.75rem, 0.72rem + 0.15vw, 0.8125rem);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 2px;
+  border: 1px solid currentColor;
+}
+
+.badge-pending  { color: var(--gg-text-2); border-color: var(--gg-line-2); }
+.badge-accepted { color: var(--gg-success); border-color: rgba(58,210,159,0.3); }
+.badge-declined { color: var(--gg-error); border-color: rgba(255,90,90,0.3); }
+.badge-completed{ color: var(--gg-cyan); border-color: rgba(0,200,212,0.3); }
+
+/* ─────────────────────────────────────────────
+   Noise texture overlay (subtle grain)
+───────────────────────────────────────────── */
+.noise-overlay::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 128px 128px;
+}
+
+/* ─────────────────────────────────────────────
+   Reduced Motion
+───────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+  html {
+    scroll-behavior: auto;
   }
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-
-  body {
-    @apply bg-background text-foreground;
-  }
+/* ─────────────────────────────────────────────
+   shadcn/ui overrides — dark theme enforcement
+───────────────────────────────────────────── */
+.dark {
+  --background:   0 0% 4%;
+  --foreground:   240 5% 96%;
+  --card:         240 4% 7%;
+  --card-foreground: 240 5% 96%;
+  --popover:      240 4% 10%;
+  --popover-foreground: 240 5% 96%;
+  --primary:      184 100% 42%;
+  --primary-foreground: 0 0% 4%;
+  --secondary:    240 4% 10%;
+  --secondary-foreground: 240 5% 96%;
+  --muted:        240 4% 15%;
+  --muted-foreground: 240 4% 67%;
+  --accent:       322 63% 49%;
+  --accent-foreground: 0 0% 4%;
+  --destructive:  0 100% 67%;
+  --destructive-foreground: 240 5% 96%;
+  --border:       240 4% 17%;
+  --input:        240 4% 10%;
+  --ring:         184 100% 42%;
 }
