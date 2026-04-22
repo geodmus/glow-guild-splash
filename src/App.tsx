@@ -12,6 +12,8 @@ import CreatorDashboard from "./pages/CreatorDashboard";
 import ProfileCompletion from "./pages/ProfileCompletion";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
+import Discover from "./pages/Discover";
+import CreatorProfile from "./pages/CreatorProfile";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +27,8 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/discover" element={<Discover />} />
+            <Route path="/c/:slug" element={<CreatorProfile />} />
             <Route 
               path="/brand/dashboard" 
               element={
