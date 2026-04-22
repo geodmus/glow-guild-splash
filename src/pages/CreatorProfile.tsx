@@ -15,6 +15,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { type Creator, type Platform } from "@/components/CreatorCard";
+import { BookingRequestDialog } from "@/components/BookingRequestDialog";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -196,6 +197,7 @@ export default function CreatorProfile() {
   const [portfolioUrls, setPortfolioUrls] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   useEffect(() => {
     if (!slug) return;
@@ -408,7 +410,7 @@ export default function CreatorProfile() {
 
             {/* CTA — sticky on mobile, inline on desktop */}
             <div className="hidden lg:flex flex-col gap-3 mt-2">
-              <BookingCTA creator={creator} />
+              <BookingCTA creator={creator} onOpen={() => setDialogOpen(true)} />
             </div>
           </aside>
 
@@ -487,10 +489,16 @@ export default function CreatorProfile() {
 
         {/* Mobile sticky CTA */}
         <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 p-4 bg-[#0a0a0b] border-t border-[#2a2a2f]">
-          <BookingCTA creator={creator} fullWidth />
+<BookingCTA creator={creator} onOpen={() => setDialogOpen(true)} fullWidth />
+
         </div>
         {/* Spacer so content isn't hidden behind sticky mobile CTA */}
         <div className="lg:hidden h-24" aria-hidden="true" />
+              <BookingRequestDialog
+        creator={creator}
+        open={dialogOpen}
+        onClose={() => setDialogOpen(false)}
+      />
       </div>
     </div>
   );
@@ -502,12 +510,13 @@ export default function CreatorProfile() {
 
 function BookingCTA({
   creator,
+  onOpen,
   fullWidth = false,
 }: {
   creator: Creator;
+  onOpen: () => void;
   fullWidth?: boolean;
 }) {
-  const [clicked, setClicked] = useState(false);
 
   if (!creator.is_available) {
     return (
@@ -525,7 +534,7 @@ function BookingCTA({
 
   return (
     <button
-      onClick={() => setClicked(true)}
+      onClick={onOpen}
       data-booking-trigger={creator.id}
       className={[
         "flex items-center justify-center gap-2 h-11 rounded-[4px]",
