@@ -178,9 +178,9 @@ code, kbd, samp, pre {
 
 /* Eyebrow label — signature pattern */
 .eyebrow {
-  font-size: clamp(0.75rem, 0.72rem + 0.15vw, 0.8125rem);
+  font-size: 0.75rem;
   font-weight: 500;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--gg-text-2);
 }

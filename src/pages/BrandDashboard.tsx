@@ -1,5 +1,5 @@
 import { useAuth } from "@/hooks/useAuth";
-import { Navigation } from "@/components/Navigation";
+import { Nav } from "@/components/Nav";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -47,7 +47,7 @@ const BrandDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-subtle">
-      <Navigation />
+      <Nav />
       <main className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-foreground mb-2">
