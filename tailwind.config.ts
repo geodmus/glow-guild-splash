@@ -121,6 +121,9 @@ const config: Config = {
       },
 
       borderRadius: {
+        "gg-sm": "2px",
+        "gg-md": "4px",
+        "gg-lg": "6px",
         sm:   "2px",
         DEFAULT: "4px",
         md:   "4px",
@@ -149,6 +152,12 @@ const config: Config = {
         "base": "220ms",
         "slow": "420ms",
         "hero": "900ms",
+      },
+
+      letterSpacing: {
+        "gg-tight": "-0.02em",
+        "gg-wide": "0.04em",
+        "gg-wider": "0.08em",
       },
 
       keyframes: {

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { Navigation } from "@/components/Navigation";
+import { Nav } from "@/components/Nav";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -95,7 +95,7 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-gradient-subtle">
-      <Navigation />
+      <Nav />
       <main className="container mx-auto px-4 py-24">
         <div className="max-w-2xl mx-auto">
           <div className="mb-8">
