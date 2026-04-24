@@ -12,10 +12,26 @@
 
 -- ─────────────────────────────────────────────────────────────────────────────
 -- 0. Remove tables from Realtime publication (must happen before DROP)
+--    Using DO block because ALTER PUBLICATION does not support IF EXISTS
 -- ─────────────────────────────────────────────────────────────────────────────
 
-ALTER PUBLICATION supabase_realtime DROP TABLE IF EXISTS public.messages;
-ALTER PUBLICATION supabase_realtime DROP TABLE IF EXISTS public.booking_requests;
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM pg_publication_tables
+    WHERE pubname = 'supabase_realtime' AND tablename = 'messages' AND schemaname = 'public'
+  ) THEN
+    ALTER PUBLICATION supabase_realtime DROP TABLE public.messages;
+  END IF;
+
+  IF EXISTS (
+    SELECT 1 FROM pg_publication_tables
+    WHERE pubname = 'supabase_realtime' AND tablename = 'booking_requests' AND schemaname = 'public'
+  ) THEN
+    ALTER PUBLICATION supabase_realtime DROP TABLE public.booking_requests;
+  END IF;
+END;
+$$;
 
 -- ─────────────────────────────────────────────────────────────────────────────
 -- 1. DROP existing tables (order respects FK dependencies)
