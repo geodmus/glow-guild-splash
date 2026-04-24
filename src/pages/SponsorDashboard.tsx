@@ -76,7 +76,7 @@ export default function SponsorDashboard() {
           <div className="border border-gg-line rounded-gg-lg bg-gg-ink-2 py-20 px-8 text-center">
             <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gg-ink-3 border border-gg-line mb-5"><TrendingUp className="h-5 w-5 text-gg-text-3" /></div>
             <div className="eyebrow mb-3">Your first campaign</div>
-            <p className="text-gg-base text-gg-text-2 mb-6 max-w-[44ch] mx-auto">Find a creator whose audience fits your brand. Send a brief. Most creators respond in under a day.</p>
+            <p className="text-gg-base text-gg-text-2 mb-6 max-w-[44ch] mx-auto">Find a creator whose audience fits your company. Send a brief. Most creators respond in under a day.</p>
             <Link to="/discover"><Button className="bg-gg-cyan text-gg-ink hover:bg-gg-cyan/90 rounded-gg-md font-medium"><Search className="mr-2 h-4 w-4" />Browse creators</Button></Link>
           </div>
         ) : (

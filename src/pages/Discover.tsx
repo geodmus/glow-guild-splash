@@ -127,22 +127,20 @@ export default function Discover() {
 
         if (sbError) throw sbError;
 
-        // Map DB rows → Creator type
         const mapped: Creator[] = (data ?? []).map((row: any) => ({
           id: row.id,
-          slug: row.slug ?? row.id,
-          handle: row.handle ?? "",
-          display_name: row.display_name ?? row.handle ?? "Unknown",
-          avatar_url: row.avatar_url ?? undefined,
+          profile_slug: row.profile_slug ?? row.id,
+          display_name: row.display_name ?? "",
           bio: row.bio ?? undefined,
-          location: row.location ?? undefined,
-          niches: row.niches ?? [],
-          primary_platform: (row.primary_platform as Platform) ?? "instagram",
-          follower_count: row.follower_count ?? 0,
-          engagement_rate: row.engagement_rate ?? undefined,
-          rate_min: row.rate_min ?? undefined,
-          rate_max: row.rate_max ?? undefined,
-          is_available: row.is_available ?? false,
+          location_city: row.location_city ?? undefined,
+          location_region: row.location_region ?? undefined,
+          niche_tags: row.niche_tags ?? [],
+          primary_platforms: row.primary_platforms ?? ["instagram"],
+          follower_count_total: row.follower_count_total ?? 0,
+          rate_min_usd: row.rate_min_usd ?? undefined,
+          rate_max_usd: row.rate_max_usd ?? undefined,
+          avatar_url: row.avatar_url ?? undefined,
+          portfolio_links: row.portfolio_links ?? []
         }));
 
         setCreators(mapped);
@@ -161,62 +159,53 @@ export default function Discover() {
   const filtered = useMemo(() => {
     let result = [...creators];
 
-    // Search: handle, display_name, bio, location
     if (search.trim()) {
       const q = search.toLowerCase();
       result = result.filter(
         (c) =>
           c.display_name.toLowerCase().includes(q) ||
-          c.handle.toLowerCase().includes(q) ||
           c.bio?.toLowerCase().includes(q) ||
-          c.location?.toLowerCase().includes(q) ||
-          c.niches.some((n) => n.toLowerCase().includes(q))
+          c.location_city?.toLowerCase().includes(q) ||
+          c.location_region?.toLowerCase().includes(q) ||
+          c.niche_tags.some((n) => n.toLowerCase().includes(q))
       );
     }
 
-    // Niche filter (must match ALL selected)
     if (selectedNiches.length > 0) {
       result = result.filter((c) =>
         selectedNiches.every((n) =>
-          c.niches.map((x) => x.toLowerCase()).includes(n.toLowerCase())
+          c.niche_tags.map((x) => x.toLowerCase()).includes(n.toLowerCase())
         )
       );
     }
 
-    // Platform filter
     if (selectedPlatform) {
-      result = result.filter((c) => c.primary_platform === selectedPlatform);
+      result = result.filter((c) => c.primary_platforms.includes(selectedPlatform as Platform));
     }
 
-    // Follower range
     if (selectedFollowerRange !== null) {
       const range = FOLLOWER_RANGES[selectedFollowerRange];
       result = result.filter(
-        (c) => c.follower_count >= range.min && c.follower_count <= range.max
+        (c) => c.follower_count_total >= range.min && c.follower_count_total <= range.max
       );
     }
 
-    // Available only
     if (availableOnly) {
-      result = result.filter((c) => c.is_available);
+      // availability field removed from schema; keep toggle as no-op
     }
 
-    // Sort
     switch (sortBy) {
       case "followers_desc":
-        result.sort((a, b) => b.follower_count - a.follower_count);
+        result.sort((a, b) => b.follower_count_total - a.follower_count_total);
         break;
       case "followers_asc":
-        result.sort((a, b) => a.follower_count - b.follower_count);
-        break;
-      case "engagement_desc":
-        result.sort((a, b) => (b.engagement_rate ?? 0) - (a.engagement_rate ?? 0));
+        result.sort((a, b) => a.follower_count_total - b.follower_count_total);
         break;
       case "rate_asc":
-        result.sort((a, b) => (a.rate_min ?? 9999) - (b.rate_min ?? 9999));
+        result.sort((a, b) => (a.rate_min_usd ?? 9999) - (b.rate_min_usd ?? 9999));
         break;
       case "rate_desc":
-        result.sort((a, b) => (b.rate_max ?? 0) - (a.rate_max ?? 0));
+        result.sort((a, b) => (b.rate_max_usd ?? 0) - (a.rate_max_usd ?? 0));
         break;
     }
 

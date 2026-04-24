@@ -2,35 +2,33 @@
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Instagram,
   Youtube,
   ExternalLink,
-  TrendingUp,
   Users,
 } from "lucide-react";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-export type Platform = "instagram" | "tiktok" | "youtube" | "twitter" | "linkedin";
+import type { Platform } from "@/integrations/supabase/types";
+export type { Platform };
 
 export interface Creator {
   id: string;
-  slug: string;
-  handle: string;
+  profile_slug: string;
   display_name: string;
-  avatar_url?: string;
   bio?: string;
-  location?: string;
-  niches: string[];
-  primary_platform: Platform;
-  follower_count: number;
-  engagement_rate?: number; // e.g. 4.2 = 4.2%
-  rate_min?: number;
-  rate_max?: number;
-  is_available: boolean;
+  location_city?: string;
+  location_region?: string;
+  niche_tags: string[];
+  primary_platforms: Platform[];
+  follower_count_total: number;
+  rate_min_usd?: number;
+  rate_max_usd?: number;
+  avatar_url?: string;
+  portfolio_links?: string[];
 }
 
 interface CreatorCardProps {
@@ -64,7 +62,7 @@ function getInitials(name: string): string {
     .toUpperCase();
 }
 
-const PLATFORM_ICONS: Record<Platform, React.ReactNode> = {
+const PLATFORM_ICONS: Partial<Record<Platform, React.ReactNode>> = {
   instagram: <Instagram size={13} />,
   tiktok: (
     // Simple TikTok glyph (no lucide icon)
@@ -103,12 +101,16 @@ const PLATFORM_ICONS: Record<Platform, React.ReactNode> = {
   ),
 };
 
-const PLATFORM_LABELS: Record<Platform, string> = {
+const PLATFORM_LABELS: Partial<Record<Platform, string>> = {
   instagram: "Instagram",
   tiktok: "TikTok",
   youtube: "YouTube",
   twitter: "X / Twitter",
   linkedin: "LinkedIn",
+  facebook: "Facebook",
+  pinterest: "Pinterest",
+  snapchat: "Snapchat",
+  other: "Other",
 };
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -117,22 +119,21 @@ export function CreatorCard({ creator, compact = false }: CreatorCardProps) {
   const [hovered, setHovered] = useState(false);
 
   const {
-    slug,
-    handle,
+    profile_slug,
     display_name,
     avatar_url,
-    niches,
-    primary_platform,
-    follower_count,
-    engagement_rate,
-    rate_min,
-    rate_max,
-    is_available,
+    niche_tags,
+    primary_platforms,
+    follower_count_total,
+    rate_min_usd,
+    rate_max_usd,
   } = creator;
+
+  const primary_platform: Platform = primary_platforms?.[0] ?? "instagram";
 
   return (
     <Link
-      to={`/c/${slug}`}
+      to={`/c/${profile_slug}`}
       className="group block focus-visible:outline-none"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -157,23 +158,6 @@ export function CreatorCard({ creator, compact = false }: CreatorCardProps) {
             : "none",
         }}
       >
-        {/* ── Availability dot ── */}
-        {is_available && (
-          <span
-            className="absolute top-4 right-4 flex items-center gap-1.5"
-            aria-label="Available for bookings"
-          >
-            <span
-              className="block w-1.5 h-1.5 rounded-full bg-[#cc2d8f]"
-              style={{ boxShadow: "0 0 6px 1px rgba(204,45,143,0.6)" }}
-            />
-            <span className="text-[#a8a8b0] uppercase tracking-widest font-mono"
-              style={{ fontSize: "10px", letterSpacing: "0.08em" }}>
-              Available
-            </span>
-          </span>
-        )}
-
         {/* ── Header: avatar + name + platform ── */}
         <div className="flex items-start gap-3">
           <Avatar
@@ -214,13 +198,6 @@ export function CreatorCard({ creator, compact = false }: CreatorCardProps) {
               {display_name}
             </span>
 
-            {/* Handle */}
-            <span
-              className="text-[#6b6b74] truncate"
-              style={{ fontSize: "12px" }}
-            >
-              @{handle}
-            </span>
           </div>
         </div>
 
@@ -230,30 +207,16 @@ export function CreatorCard({ creator, compact = false }: CreatorCardProps) {
           <div className="flex items-center gap-1.5 text-[#a8a8b0]">
             <Users size={13} className="shrink-0 text-[#6b6b74]" />
             <span className="font-mono text-[#f4f4f5] text-sm font-medium">
-              {formatFollowers(follower_count)}
+              {formatFollowers(follower_count_total)}
             </span>
             <span style={{ fontSize: "11px" }}>followers</span>
           </div>
-
-          {/* Engagement rate */}
-          {engagement_rate != null && (
-            <>
-              <span className="w-px h-3 bg-[#2a2a2f]" aria-hidden="true" />
-              <div className="flex items-center gap-1.5 text-[#a8a8b0]">
-                <TrendingUp size={13} className="shrink-0 text-[#3ad29f]" />
-                <span className="font-mono text-[#f4f4f5] text-sm font-medium">
-                  {engagement_rate.toFixed(1)}%
-                </span>
-                <span style={{ fontSize: "11px" }}>eng.</span>
-              </div>
-            </>
-          )}
         </div>
 
         {/* ── Niche tags ── */}
-        {niches.length > 0 && (
+        {niche_tags.length > 0 && (
           <div className="flex flex-wrap gap-1.5" aria-label="Niches">
-            {niches.slice(0, compact ? 2 : 4).map((niche) => (
+            {niche_tags.slice(0, compact ? 2 : 4).map((niche) => (
               <span
                 key={niche}
                 className="inline-flex items-center px-2 py-0.5 rounded-[2px] border border-[#2a2a2f] text-[#a8a8b0] uppercase font-medium tracking-wider"
@@ -262,12 +225,12 @@ export function CreatorCard({ creator, compact = false }: CreatorCardProps) {
                 {niche}
               </span>
             ))}
-            {niches.length > (compact ? 2 : 4) && (
+            {niche_tags.length > (compact ? 2 : 4) && (
               <span
                 className="inline-flex items-center px-2 py-0.5 rounded-[2px] border border-[#2a2a2f] text-[#6b6b74] uppercase font-medium tracking-wider"
                 style={{ fontSize: "10px", letterSpacing: "0.06em" }}
               >
-                +{niches.length - (compact ? 2 : 4)}
+                +{niche_tags.length - (compact ? 2 : 4)}
               </span>
             )}
           </div>
@@ -283,7 +246,7 @@ export function CreatorCard({ creator, compact = false }: CreatorCardProps) {
               Rate range
             </span>
             <span className="text-[#f4f4f5] font-mono text-sm font-semibold">
-              {formatRate(rate_min, rate_max)}
+              {formatRate(rate_min_usd, rate_max_usd)}
             </span>
           </div>
 

@@ -9,7 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Eye, EyeOff, Building2, Users, Sparkles } from "lucide-react";
 
-type UserType = 'brand' | 'creator';
+type UserType = 'sponsor' | 'creator';
 
 export const AuthForm = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -42,7 +42,7 @@ export const AuthForm = () => {
           data: {
             user_type: userType,
             display_name: formData.displayName,
-            company_name: userType === 'brand' ? formData.companyName : null
+            company_name: userType === 'sponsor' ? formData.companyName : null
           }
         }
       });
@@ -98,8 +98,8 @@ export const AuthForm = () => {
       description: 'Join our network and get paid for authentic content'
     },
     {
-      value: 'brand' as const,
-      label: 'Beauty Brand',
+      value: 'sponsor' as const,
+      label: 'Sponsor',
       icon: Building2,
       description: 'Connect with creators and scale your marketing'
     }
@@ -172,7 +172,7 @@ export const AuthForm = () => {
                   />
                 </div>
 
-                {userType === 'brand' && (
+                {userType === 'sponsor' && (
                   <div className="space-y-2">
                     <Label htmlFor="companyName">Company Name</Label>
                     <Input
@@ -180,7 +180,7 @@ export const AuthForm = () => {
                       type="text"
                       value={formData.companyName}
                       onChange={(e) => handleInputChange('companyName', e.target.value)}
-                      placeholder="Your beauty brand name"
+                      placeholder="Your company name"
                       required
                     />
                   </div>
@@ -228,11 +228,11 @@ export const AuthForm = () => {
 
                 <Button
                   type="submit"
-                  variant={userType === 'brand' ? 'brand' : 'creator'}
+                  variant={userType === 'sponsor' ? 'brand' : 'creator'}
                   className="w-full"
                   disabled={isLoading}
                 >
-                  {isLoading ? 'Creating Account...' : `Join as ${userType === 'brand' ? 'Brand' : 'Creator'}`}
+                  {isLoading ? 'Creating Account...' : `Join as ${userType === 'sponsor' ? 'Sponsor' : 'Creator'}`}
                 </Button>
               </form>
             </TabsContent>

@@ -342,9 +342,11 @@ export function BookingRequestDialog({
       const { error } = await supabase.from("booking_requests").insert({
         creator_id: creator.id,
         sponsor_id: user.id,
-        deliverable_type: form.deliverable_type,
-        budget_offer: budgetNum,
-        timeline: form.timeline,
+        campaign_title: "Booking Request",
+        deliverable: form.deliverable_type,
+        budget_offer_usd: budgetNum,
+        timeline_start: new Date().toISOString().split('T')[0],
+        timeline_end: new Date(Date.now() + 30*24*60*60*1000).toISOString().split('T')[0],
         campaign_brief: form.campaign_brief.trim(),
         status: "pending",
       });
@@ -396,7 +398,7 @@ export function BookingRequestDialog({
               <h2 className="text-[#f4f4f5] text-lg font-bold leading-tight tracking-tight">
                 {creator.display_name}
               </h2>
-              <span className="text-[#6b6b74] text-sm">@{creator.handle}</span>
+              <span className="text-[#6b6b74] text-sm">{creator.profile_slug}</span>
             </div>
             <button
               ref={firstFocusRef}
@@ -467,9 +469,9 @@ export function BookingRequestDialog({
                     />
                   </div>
                   <FieldError message={errors.budget_offer} />
-                  {creator.rate_min && (
+                  {creator.rate_min_usd && (
                     <p className="text-[#6b6b74]" style={{ fontSize: "11px" }}>
-                      This creator's range starts at ${creator.rate_min}.
+                      This creator's range starts at ${creator.rate_min_usd}.
                     </p>
                   )}
                 </div>

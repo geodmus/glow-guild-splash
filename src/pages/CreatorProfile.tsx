@@ -6,7 +6,6 @@ import {
   ArrowLeft,
   MapPin,
   Users,
-  TrendingUp,
   ExternalLink,
   Instagram,
   Youtube,
@@ -37,7 +36,7 @@ function getInitials(name: string): string {
   return name.split(" ").slice(0, 2).map((w) => w[0]).join("").toUpperCase();
 }
 
-const PLATFORM_META: Record<Platform, { label: string; icon: React.ReactNode; color: string }> = {
+const PLATFORM_META: Partial<Record<Platform, { label: string; icon: React.ReactNode; color: string }>> = {
   instagram: {
     label: "Instagram",
     icon: <Instagram size={15} />,
@@ -209,7 +208,7 @@ export default function CreatorProfile() {
       const { data, error } = await supabase
         .from("creators")
         .select("*")
-        .or(`slug.eq.${slug},id.eq.${slug}`)
+        .or(`profile_slug.eq.${slug},id.eq.${slug}`)
         .single();
 
       if (error || !data) {
@@ -220,23 +219,22 @@ export default function CreatorProfile() {
 
       const mapped: Creator = {
         id: data.id,
-        slug: data.slug ?? data.id,
-        handle: data.handle ?? "",
-        display_name: data.display_name ?? data.handle ?? "Unknown",
-        avatar_url: data.avatar_url ?? undefined,
+        profile_slug: data.profile_slug ?? data.id,
+        display_name: data.display_name ?? "",
         bio: data.bio ?? undefined,
-        location: data.location ?? undefined,
-        niches: data.niches ?? [],
-        primary_platform: (data.primary_platform as Platform) ?? "instagram",
-        follower_count: data.follower_count ?? 0,
-        engagement_rate: data.engagement_rate ?? undefined,
-        rate_min: data.rate_min ?? undefined,
-        rate_max: data.rate_max ?? undefined,
-        is_available: data.is_available ?? false,
+        location_city: data.location_city ?? undefined,
+        location_region: data.location_region ?? undefined,
+        niche_tags: data.niche_tags ?? [],
+        primary_platforms: data.primary_platforms ?? ["instagram"],
+        follower_count_total: data.follower_count_total ?? 0,
+        rate_min_usd: data.rate_min_usd ?? undefined,
+        rate_max_usd: data.rate_max_usd ?? undefined,
+        avatar_url: data.avatar_url ?? undefined,
+        portfolio_links: data.portfolio_links ?? []
       };
 
       setCreator(mapped);
-      setPortfolioUrls(data.portfolio_urls ?? []);
+      setPortfolioUrls(data.portfolio_links ?? []);
       setLoading(false);
     }
 
@@ -271,7 +269,8 @@ export default function CreatorProfile() {
 
   if (!creator) return null;
 
-  const platform = PLATFORM_META[creator.primary_platform];
+  const primaryPlatform: Platform = creator.primary_platforms?.[0] ?? "instagram";
+  const platform = PLATFORM_META[primaryPlatform] ?? { label: "Other", icon: <ExternalLink size={15} />, color: "#a8a8b0" };
 
   return (
     <div className="min-h-screen bg-[#0a0a0b] text-[#f4f4f5]">
@@ -306,46 +305,20 @@ export default function CreatorProfile() {
                   </AvatarFallback>
                 </Avatar>
 
-                {/* Availability dot */}
-                {creator.is_available && (
-                  <span
-                    className="absolute bottom-1 right-1 w-3.5 h-3.5 rounded-full bg-[#cc2d8f] border-2 border-[#0a0a0b]"
-                    style={{ boxShadow: "0 0 8px 2px rgba(204,45,143,0.5)" }}
-                    aria-label="Available for bookings"
-                  />
-                )}
               </div>
 
               <div className="flex flex-col gap-1">
                 <h1 className="text-2xl font-bold text-[#f4f4f5] leading-tight tracking-tight">
                   {creator.display_name}
                 </h1>
-                <span className="text-[#6b6b74] text-sm">@{creator.handle}</span>
 
-                {creator.location && (
+                {(creator.location_city || creator.location_region) && (
                   <span className="flex items-center gap-1.5 text-[#a8a8b0] text-sm mt-1">
                     <MapPin size={12} className="text-[#6b6b74]" />
-                    {creator.location}
+                    {[creator.location_city, creator.location_region].filter(Boolean).join(", ")}
                   </span>
                 )}
               </div>
-
-              {/* Availability badge */}
-              {creator.is_available && (
-                <div className="flex items-center gap-2">
-                  <span
-                    className="w-1.5 h-1.5 rounded-full bg-[#cc2d8f] shrink-0"
-                    style={{ boxShadow: "0 0 6px 1px rgba(204,45,143,0.6)" }}
-                    aria-hidden="true"
-                  />
-                  <span
-                    className="uppercase text-[#cc2d8f] font-medium tracking-widest"
-                    style={{ fontSize: "10px", letterSpacing: "0.1em" }}
-                  >
-                    Available for bookings
-                  </span>
-                </div>
-              )}
             </div>
 
             {/* Divider */}
@@ -369,7 +342,7 @@ export default function CreatorProfile() {
             </div>
 
             {/* Niches */}
-            {creator.niches.length > 0 && (
+            {creator.niche_tags.length > 0 && (
               <div className="flex flex-col gap-2">
                 <span
                   className="uppercase text-[#6b6b74] font-medium tracking-widest"
@@ -378,7 +351,7 @@ export default function CreatorProfile() {
                   Niches
                 </span>
                 <div className="flex flex-wrap gap-1.5">
-                  {creator.niches.map((niche) => (
+                  {creator.niche_tags.map((niche) => (
                     <span
                       key={niche}
                       className="px-2 py-1 rounded-[2px] border border-[#2a2a2f] text-[#a8a8b0] uppercase font-medium tracking-wider"
@@ -403,7 +376,7 @@ export default function CreatorProfile() {
                 Rate range
               </span>
               <span className="font-mono text-[#f4f4f5] font-semibold text-base">
-                {formatRate(creator.rate_min, creator.rate_max)}
+                {formatRate(creator.rate_min_usd, creator.rate_max_usd)}
               </span>
               <span className="text-[#6b6b74] text-xs">Per deliverable. Final rate agreed in booking.</span>
             </div>
@@ -421,16 +394,9 @@ export default function CreatorProfile() {
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               <StatBlock
                 eyebrow="Followers"
-                value={formatFollowers(creator.follower_count)}
+                value={formatFollowers(creator.follower_count_total)}
                 icon={<Users size={10} />}
               />
-              {creator.engagement_rate != null && (
-                <StatBlock
-                  eyebrow="Engagement"
-                  value={`${creator.engagement_rate.toFixed(1)}%`}
-                  icon={<TrendingUp size={10} />}
-                />
-              )}
               <StatBlock
                 eyebrow="Platform"
                 value={platform.label}
@@ -517,20 +483,6 @@ function BookingCTA({
   onOpen: () => void;
   fullWidth?: boolean;
 }) {
-
-  if (!creator.is_available) {
-    return (
-      <div
-        className={[
-          "flex items-center justify-center gap-2 h-11 rounded-[4px] border border-[#2a2a2f]",
-          "text-[#6b6b74] text-sm font-medium cursor-not-allowed",
-          fullWidth ? "w-full" : "",
-        ].join(" ")}
-      >
-        Not taking bookings
-      </div>
-    );
-  }
 
   return (
     <button

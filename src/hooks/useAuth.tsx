@@ -4,13 +4,8 @@ import { supabase } from '@/integrations/supabase/client';
 
 interface Profile {
   id: string;
-  user_id: string;
-  user_type: 'brand' | 'creator';
-  display_name: string | null;
-  company_name: string | null;
-  bio: string | null;
-  website_url: string | null;
-  avatar_url: string | null;
+  role: 'creator' | 'sponsor' | 'admin';
+  email: string;
   created_at: string;
   updated_at: string;
 }
@@ -44,7 +39,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
-        .eq('user_id', userId)
+        .eq('id', userId)
         .maybeSingle();
 
       if (error) {
@@ -94,12 +89,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
               // Fetch profile first to determine redirect
               supabase
                 .from('profiles')
-                .select('user_type')
-                .eq('user_id', session.user.id)
+                .select('role')
+                .eq('id', session.user.id)
                 .maybeSingle()
                 .then(({ data }) => {
-                  if (data?.user_type === 'brand') {
-                    window.location.href = '/brand/dashboard';
+                  if (data?.role === 'sponsor') {
+                    window.location.href = '/sponsor/dashboard';
                   } else {
                     window.location.href = '/creator/dashboard';
                   }
