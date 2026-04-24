@@ -16,6 +16,7 @@ import BookingDetail from "./pages/BookingDetail";
 
 import CreatorOnboarding from "./pages/CreatorOnboarding";
 import SponsorOnboarding from "./pages/SponsorOnboarding";
+import AuthCallback from './pages/AuthCallback';
 
 const queryClient = new QueryClient();
 
@@ -37,7 +38,7 @@ const App = () => (
           <Route path="/creator/dashboard" element={<CreatorDashboard />} />
           <Route path="/sponsor/dashboard" element={<SponsorDashboard />} />
           <Route path="/bookings/:id" element={<BookingDetail />} />
-
+          <Route path="/auth/callback" element={<AuthCallback />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

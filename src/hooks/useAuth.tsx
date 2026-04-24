@@ -36,20 +36,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const fetchProfile = async (userId: string) => {
     try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', userId)
-        .maybeSingle();
-
+      const { data: profile, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", userId)
+        .single();
+        
       if (error) {
-        console.error('Error fetching profile:', error);
-        return;
+        console.error('Profile fetch error:', error);
+        throw error;
       }
-
-      setProfile(data);
+      
+      setProfile(profile);
     } catch (error) {
-      console.error('Error fetching profile:', error);
+      console.error('useAuth error:', error);
+      setProfile(null);
     }
   };
 
@@ -91,7 +92,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 .from('profiles')
                 .select('role')
                 .eq('id', session.user.id)
-                .maybeSingle()
+                .single()
                 .then(({ data }) => {
                   if (data?.role === 'sponsor') {
                     window.location.href = '/sponsor/dashboard';

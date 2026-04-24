@@ -38,12 +38,8 @@ export const AuthForm = () => {
         email: formData.email,
         password: formData.password,
         options: {
-          emailRedirectTo: redirectUrl,
-          data: {
-            user_type: userType,
-            display_name: formData.displayName,
-            company_name: userType === 'sponsor' ? formData.companyName : null
-          }
+          data: { user_type: userType },
+          emailRedirectTo: `${window.location.origin}/auth/callback`
         }
       });
 
