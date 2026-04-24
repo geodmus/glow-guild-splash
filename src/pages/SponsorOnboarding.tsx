@@ -139,7 +139,7 @@ export default function SponsorOnboarding() {
       <header className="border-b border-gg-line bg-gg-ink">
         <div className="container py-10 md:py-14">
           <div className="eyebrow mb-3">Sponsor setup</div>
-          <h1 className="font-display text-gg-3xl md:text-gg-4xl tracking-gg-tight font-medium mb-4">Set up your brand.</h1>
+          <h1 className="font-display text-gg-3xl md:text-gg-4xl tracking-gg-tight font-medium mb-4">Set up your sponsor profile.</h1>
           <p className="text-gg-base text-gg-text-2 max-w-[56ch]">A short profile is all creators need to decide if you're a fit. You can polish this later.</p>
         </div>
       </header>
@@ -191,8 +191,8 @@ export default function SponsorOnboarding() {
             </div>
           </Field>
 
-          <Field label="About your brand" required helper="20 words minimum.">
-            <Textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={5} placeholder="We're a small-batch matcha brand based in Evanston. We source from one farm in Uji and sell direct-to-consumer…" className="bg-gg-ink-2 border-gg-line text-gg-text placeholder:text-gg-text-3 focus:border-gg-cyan focus:ring-1 focus:ring-gg-cyan rounded-gg-md resize-y min-h-[120px]" />
+          <Field label="About your company" required helper="20 words minimum.">
+            <Textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={5} placeholder="We're a small-batch matcha company based in Evanston. We source from one farm in Uji and sell direct-to-consumer…" className="bg-gg-ink-2 border-gg-line text-gg-text placeholder:text-gg-text-3 focus:border-gg-cyan focus:ring-1 focus:ring-gg-cyan rounded-gg-md resize-y min-h-[120px]" />
             <div className="font-mono text-[10px] uppercase tracking-gg-wider text-gg-text-3 mt-1.5">{description.trim().split(/\s+/).filter(Boolean).length} words</div>
           </Field>
 
