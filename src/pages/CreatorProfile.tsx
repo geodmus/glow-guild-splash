@@ -205,11 +205,12 @@ export default function CreatorProfile() {
       setLoading(true);
       setNotFound(false);
 
-      const { data, error } = await supabase
-        .from("creators")
-        .select("*")
-        .or(`profile_slug.eq.${slug},id.eq.${slug}`)
-        .single();
+      // Check if slug looks like a UUID, otherwise query by profile_slug only
+      const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slug ?? '');
+      const query = supabase.from("creators").select("*");
+      const { data, error } = isUUID
+        ? await query.or(`profile_slug.eq.${slug},id.eq.${slug}`).single()
+        : await query.eq('profile_slug', slug!).single();
 
       if (error || !data) {
         setNotFound(true);
@@ -230,11 +231,11 @@ export default function CreatorProfile() {
         rate_min_usd: data.rate_min_usd ?? undefined,
         rate_max_usd: data.rate_max_usd ?? undefined,
         avatar_url: data.avatar_url ?? undefined,
-        portfolio_links: data.portfolio_links ?? []
+        portfolio_links: (data as any).portfolio_urls ?? []
       };
 
       setCreator(mapped);
-      setPortfolioUrls(data.portfolio_links ?? []);
+      setPortfolioUrls((data as any).portfolio_urls ?? []);
       setLoading(false);
     }
 
