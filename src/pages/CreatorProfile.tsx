@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
+import { Nav } from "@/components/Nav";
 import {
   ArrowLeft,
   MapPin,
@@ -275,6 +276,7 @@ export default function CreatorProfile() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0b] text-[#f4f4f5]">
+      <Nav />
       <div className="max-w-[1440px] mx-auto px-6 md:px-10 py-8 md:py-12">
 
         {/* Back link */}

@@ -1,6 +1,6 @@
 // src/pages/Discover.tsx
-
 import { useState, useEffect, useMemo } from "react";
+import { Nav } from "@/components/Nav";
 import { Search, SlidersHorizontal, X, ChevronDown } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { CreatorCard, type Creator, type Platform } from "@/components/CreatorCard";
@@ -246,6 +246,7 @@ export default function Discover() {
   // ── Render ──────────────────────────────────────────────────────────────────
   return (
     <div className="min-h-screen bg-[#0a0a0b] text-[#f4f4f5]">
+      <Nav />
 
       {/* ── Page header ── */}
       <div className="border-b border-[#2a2a2f]">
